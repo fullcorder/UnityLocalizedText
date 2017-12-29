@@ -1,5 +1,6 @@
 ﻿using System;
 using LocalizedText.Internal;
+using LocalText.Internal;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,7 +14,7 @@ namespace LocalizedText.Importer
         {
             if(string.IsNullOrEmpty(settings.GoogleSpreadSheetUrl))
             {
-                Debug.LogError("GoogleSpreadSheetImporter Settings GoogleSpreadsheetUrl is Empty.");
+                LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Settings GoogleSpreadsheetUrl is Empty.");
                 return;
             }
 
@@ -35,7 +36,7 @@ namespace LocalizedText.Importer
                 {
                     if(Time.realtimeSinceStartup - startTime > timeOutSec)
                     {
-                        Debug.LogError("GoogleSpreadSheetImporter : Timeout. Confirm spreadsheet setting.");
+                        LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Timeout. Confirm spreadsheet setting.");
                         break;
                     }
                 }
@@ -43,20 +44,21 @@ namespace LocalizedText.Importer
                 //TODO support Unity2017 api
                 if(webRequest.isError)
                 {
-                    Debug.LogError("GoogleSpreadSheetImporter : Api Network Error.");
+                    LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Api Network Error.");
                     return;
                 }
 
                 if(webRequest.responseCode != 200)
                 {
-                    Debug.LogError("GoogleSpreadSheetImporter : Response fail. responceCode " + webRequest.responseCode);
+                    LocalizedTextLogger.ErrorFormat("GoogleSpreadSheetImporter : Response fail. responceCode {0}",
+                         webRequest.responseCode);
                     return;
                 }
 
                 var csv = webRequest.downloadHandler.text;
                 if(string.IsNullOrEmpty(csv))
                 {
-                    Debug.LogError("GoogleSpreadSheetImporter : Response body is Empty.");
+                    LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Response body is Empty.");
                     return;
                 }
 

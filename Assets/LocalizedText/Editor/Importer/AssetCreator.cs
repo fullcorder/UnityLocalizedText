@@ -18,8 +18,16 @@ namespace LocalizedText.Importer
         public static void CreateAll(Settings settings, string csv)
         {
             OnPreProcessImport += ReplaceNewline;
+
             CreteKeyDefinitionFile(settings, csv);
-            CreateTextSet(settings, csv);
+            try
+            {
+                CreateTextSet(settings, csv);
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                LocalizedTextLogger.Error("Parse Fail.The number of columns may be incorrect");
+            }
 
             AssetDatabase.Refresh();
         }
@@ -57,16 +65,16 @@ namespace LocalizedText.Importer
         {
             var textDataAssetPath = settings.TextSetAssetPath();
 
-            LocalizedTextLogger.Log(LocalizedTextLogger.LogLevel.Debug, "textDataAssetPath:" + textDataAssetPath);
-
             var textData = AssetDatabase.LoadAssetAtPath<TextSet>(textDataAssetPath);
             if(!textData)
             {
+                LocalizedTextLogger.Verbose("Create new TextSet");
                 textData = ScriptableObject.CreateInstance<TextSet>();
                 AssetDatabase.CreateAsset(textData, textDataAssetPath);
             }
             else
             {
+                LocalizedTextLogger.Verbose("Update TextSet");
                 textData.Clear();
             }
 

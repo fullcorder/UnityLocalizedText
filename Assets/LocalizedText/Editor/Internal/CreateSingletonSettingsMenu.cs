@@ -8,24 +8,26 @@ namespace LocalizedText.Editor.Internal
 {
     public static class CreateSingletonSettingsMenu
     {
-        [MenuItem("Assets/Create/Localized Text/CreateAll Singleton Settings", false, 800)]
+        [MenuItem("Assets/Create/Localized Text/Create Singleton Settings", false, 800)]
         public static void MenuItem()
         {
             var settings = AssetDataBaseHelper.FindScriptableObject<SingletonSettings>("LocalizedTextSettings");
             if(settings)
             {
+                LocalizedTextLogger.Error( "LocalizedTextSettings(SingletonSettings instance) not found." +
+                                           "Create From AssetMenu/LocalizeText/CreateSingletonSettings");
                 return;
             }
 
             var assetRootPath = AssetDataBaseHelper.FirstAssetPathOrDefault("t:Object", "LocalizedText");
             if(string.IsNullOrEmpty(assetRootPath))
             {
-                Debug.LogError("LocalizedText directory not found");
+                LocalizedTextLogger.Error("LocalizedText directory not found. " +
+                                          "LocalizedText assets must be placed under LocalizedText directory.");
                 return;
             }
 
-            LocalizedTextLogger.Log(LocalizedTextLogger.LogLevel.Debug,
-                "CreateSingletonSettingsMenu assetRootPath " + assetRootPath);
+            LocalizedTextLogger.VerboseFormat("CreateSingletonSettingsMenu assetRootPath {0}", assetRootPath);
 
             var singletonSettings = ScriptableObject.CreateInstance<SingletonSettings>();
             singletonSettings.name = "LocalizedTextSettings";

@@ -54,7 +54,7 @@ namespace LocalizedText.Internal
                 EditorGUILayout.BeginHorizontal();
                 if(GUILayout.Button("CreateAll or Update"))
                 {
-                    LocalizedTextLogger.Log(LocalizedTextLogger.LogLevel.Debug, "CreateAll Button Click");
+                    LocalizedTextLogger.Verbose("CreateAll Button Click");
                     GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
                 }
                 EditorGUILayout.EndHorizontal();
@@ -62,6 +62,7 @@ namespace LocalizedText.Internal
 
             if(EditorGUI.EndChangeCheck())
             {
+                LocalizedTextLogger.Verbose("Save Setting Asset");
                 EditorUtility.SetDirty(settings);
                 AssetDatabase.SaveAssets();
             }

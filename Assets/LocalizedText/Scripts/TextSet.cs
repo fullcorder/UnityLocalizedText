@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using LocalText.Internal;
 using UnityEngine;
 
 namespace LocalText
@@ -50,7 +51,16 @@ namespace LocalText
 
         public string Text(string key)
         {
-            return currentLanguageTextSet[key];
+            var text = "";
+            try
+            {
+                text = currentLanguageTextSet[key];
+            }
+            catch(NullReferenceException e)
+            {
+                LocalizedTextLogger.ErrorFormat("No value found for key {0}. Confirm TextSet Inspector.", key);
+            }
+            return text;
         }
 
         public string Format(string key, params object[] parasmsObjects)
