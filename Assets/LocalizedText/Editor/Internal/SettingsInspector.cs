@@ -1,10 +1,9 @@
 ﻿using System.Linq;
+using LocalizedText.Importer;
+using LocalText.Internal;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using LocalizedText.Importer;
-using LocalText.Internal;
-using Object = UnityEngine.Object;
 
 namespace LocalizedText.Internal
 {
@@ -21,7 +20,7 @@ namespace LocalizedText.Internal
         {
             get
             {
-                if (boldLabelStyle == null)
+                if(boldLabelStyle == null)
                 {
                     boldLabelStyle = new GUIStyle(EditorStyles.boldLabel)
                     {
@@ -45,7 +44,12 @@ namespace LocalizedText.Internal
         private void AddCallBack(ReorderableList list)
         {
             var settings = serializedObject.targetObject as Settings;
-            settings.LanguageSettingList.Add(new Settings.LanguageSetting());
+            var languageSetting = new Settings.LanguageSetting();
+            if(settings.LanguageSettingList.Count == 0)
+            {
+                languageSetting.IsDefault = true;
+            }
+            settings.LanguageSettingList.Add(languageSetting);
         }
 
         public override void OnInspectorGUI()
@@ -56,15 +60,17 @@ namespace LocalizedText.Internal
 
             EditorGUI.BeginChangeCheck();
 
-            GUILayout.Label("TextSet name", BoldLabelStyle);
-
+            //Asset Name
+            GUILayout.Label(Constant.Inspactor.TextSetName, BoldLabelStyle);
             settings.TextSetAssetName = EditorGUILayout.TextField(settings.TextSetAssetName);
 
-            GUILayout.Label("TextSet Genrete Directory", BoldLabelStyle);
-            EditorGUILayout.LabelField(settings.TextSetGenerateDirectory);
+            GUILayout.Label(Constant.Inspactor.TextSetDir, BoldLabelStyle);
+            EditorGUILayout.LabelField(string.IsNullOrEmpty(settings.TextSetGenerateDirectory)
+                ? Constant.Inspactor.FolderNotSelected
+                : settings.TextSetGenerateDirectory);
 
-            var folderForTextSet =
-                EditorGUILayout.ObjectField(settings.TextDataGenerateFolder, typeof(Object), false);
+            var folderForTextSet = EditorGUILayout.ObjectField(Constant.Inspactor.Folder,
+                settings.TextDataGenerateFolder, typeof(Object), false);
 
             if(folderForTextSet != settings.TextDataGenerateFolder)
             {
@@ -73,16 +79,19 @@ namespace LocalizedText.Internal
                 settings.TextSetGenerateDirectory = assetPath;
             }
 
-            GUILayout.Label("Key definition class Name", BoldLabelStyle);
+            Separator();
 
+            //Key Class Name
+            GUILayout.Label(Constant.Inspactor.KeyClass, BoldLabelStyle);
             settings.KeyDefinitionClassName = EditorGUILayout.TextField(settings.KeyDefinitionClassName);
 
-            GUILayout.Label("Key definition Genrete Directory", BoldLabelStyle);
+            GUILayout.Label(Constant.Inspactor.KeyClassDir, BoldLabelStyle);
+            EditorGUILayout.LabelField(string.IsNullOrEmpty(settings.KeyClassGenerateDirectory)
+                ? Constant.Inspactor.KeyClassDir
+                : settings.KeyClassGenerateDirectory);
 
-            EditorGUILayout.LabelField(settings.KeyClassGenerateDirectory);
-
-            var folderForKeyFile = EditorGUILayout.ObjectField(settings.KeyClassGenerateFolder,
-                typeof(UnityEngine.Object), false);
+            var folderForKeyFile = EditorGUILayout.ObjectField(Constant.Inspactor.Folder,
+                settings.KeyClassGenerateFolder, typeof(Object), false);
 
             if(folderForKeyFile != settings.KeyClassGenerateFolder)
             {
@@ -91,37 +100,36 @@ namespace LocalizedText.Internal
                 settings.KeyClassGenerateDirectory = assetPath;
             }
 
-            EditorGUILayout.Space();
+            Separator();
 
-            GUILayout.Label("Language", BoldLabelStyle);
+            //Language List
+            GUILayout.Label(Constant.Inspactor.Language, BoldLabelStyle);
             reorderableList.DoLayoutList();
             serializedObject.ApplyModifiedProperties();
 
-            EditorGUILayout.Space();
+            Separator();
 
-            GUILayout.Label("Data Source", BoldLabelStyle);
-            settings.SelectedDataSource = (Settings.DataSource)EditorGUILayout.EnumPopup(settings.SelectedDataSource);
+            //Data
+            GUILayout.Label(Constant.Inspactor.DataSouce, BoldLabelStyle);
+            settings.SelectedDataSource = (Settings.DataSource) EditorGUILayout.EnumPopup(settings.SelectedDataSource);
 
-            EditorGUILayout.Space();
+            GUILayout.Label(Constant.Inspactor.DataFormat, BoldLabelStyle);
+            settings.SelectedDataFormat = (Settings.DataFormat) EditorGUILayout.EnumPopup(settings.SelectedDataFormat);
 
-            GUILayout.Label("Data Format", BoldLabelStyle);
-            settings.SelectedDataFormat = (Settings.DataFormat)EditorGUILayout.EnumPopup(settings.SelectedDataFormat);
-
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Google spread sheet URL");
+            GUILayout.Label(Constant.Inspactor.SpreadSheetURL, BoldLabelStyle);
             settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
 
-            EditorGUILayout.Space();
+            Separator();
 
+            //Button
             EditorGUILayout.BeginHorizontal();
-            if(GUILayout.Button("Create"))
+            if(GUILayout.Button(Constant.Inspactor.ButtonGenerate))
             {
                 LocalizedTextLogger.Verbose("Create Button Click");
                 GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
             }
 
-            if(GUILayout.Button("Validate"))
+            if(GUILayout.Button(Constant.Inspactor.ButtonValidate))
             {
                 LocalizedTextLogger.Verbose("Validate Button Click");
 
@@ -137,6 +145,11 @@ namespace LocalizedText.Internal
             }
         }
 
+        protected static void Separator()
+        {
+            GUILayoutUtility.GetRect(6f, 18f);
+        }
+
         protected static void Validate(Settings settings)
         {
             if(settings.Valid())
@@ -145,8 +158,7 @@ namespace LocalizedText.Internal
             }
             else
             {
-                EditorUtility.DisplayDialog("Validation Error", settings.ValidationErrorMessage()
-                    .ToString(), "OK");
+                EditorUtility.DisplayDialog("Validation Error", settings.ValidationErrorMessage().ToString(), "OK");
             }
         }
 
@@ -190,7 +202,7 @@ namespace LocalizedText.Internal
             uiWidth = 100;
             drawRect.x = x;
             drawRect.width = uiWidth;
-            EditorGUI.LabelField(drawRect, "Default Language");
+            EditorGUI.LabelField(drawRect, Constant.Inspactor.DefaultLanguage);
         }
 
         private void DrawHeaderCallback(Rect rect)

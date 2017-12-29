@@ -16,14 +16,15 @@ namespace LocalizedText.Internal
             return assetPath;
         }
 
-        public static T FindAssets<T>(string filterType, string assetFileName) where T : UnityEngine.Object
+        private static T FindAssets<T>(string filterType, string assetFileName) where T : Object
         {
             var assetPath = FirstAssetPathOrDefault(filterType, assetFileName);
-            if(!string.IsNullOrEmpty(assetPath))
+            if(string.IsNullOrEmpty(assetPath))
             {
-                return AssetDatabase.LoadAssetAtPath<T>(assetPath);
+                return null;
             }
-            return null;
+
+            return AssetDatabase.LoadAssetAtPath<T>(assetPath);
         }
 
         public static T FindScriptableObject<T>(string assetName) where T : ScriptableObject

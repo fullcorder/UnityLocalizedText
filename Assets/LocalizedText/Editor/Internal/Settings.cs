@@ -1,33 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using MenuName = Constant.MenuName;
 
 namespace LocalizedText
 {
-    [CreateAssetMenu(fileName = "NewSettings", menuName = "Localized Text/CreateAll Advanced Settings", order = 801)]
+    [CreateAssetMenu(fileName = MenuName.AssetMenuFileName, menuName = MenuName.AssetMenuName, order = 801)]
     public class Settings : ScriptableObject
     {
         private static Settings _instance;
 
         public enum DataSource
         {
-            GoogleSpreadSheetAsWeb,
+            GoogleSpreadSheetAsWeb
         }
 
         public enum DataFormat
         {
             Tsv,
-            Csv,
+            Csv
         }
 
         private static readonly Dictionary<DataFormat, char> _separatorMap = new Dictionary<DataFormat, char>
         {
             {DataFormat.Tsv, '\t'},
-            {DataFormat.Csv, ','},
+            {DataFormat.Csv, ','}
         };
 
         [SerializeField] private string _textSetAssetName;
@@ -116,8 +117,9 @@ namespace LocalizedText
 
         public bool Valid()
         {
-            return ValidationErrorMessage().Length == 0;
-
+            return ValidationErrorMessage()
+                       .Length ==
+                   0;
         }
 
         public StringBuilder ValidationErrorMessage()
@@ -125,43 +127,37 @@ namespace LocalizedText
             var errorMessages = new StringBuilder();
             if(LanguageSettingList.Count == 0)
             {
-                errorMessages.Append("Language / LanguageSettingList is empty");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.EmptyLangageList);
                 errorMessages.AppendLine();
             }
 
             if(string.IsNullOrEmpty(TextSetAssetName))
             {
-                errorMessages.Append("AssetName is empty");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.NullAssetName);
                 errorMessages.AppendLine();
             }
 
             if(string.IsNullOrEmpty(TextSetGenerateDirectory))
             {
-                errorMessages.Append("TextSet Generate Directory is not selected");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.NullTextSetDirectory);
                 errorMessages.AppendLine();
             }
 
             if(string.IsNullOrEmpty(KeyDefinitionClassName))
             {
-                errorMessages.Append("Key Definition Class Name is Empty");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.NullKeyClassName);
                 errorMessages.AppendLine();
             }
 
             if(string.IsNullOrEmpty(KeyClassGenerateDirectory))
             {
-                errorMessages.Append("Key Class Generate Directory is not selected");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.NullKeyDirectory);
                 errorMessages.AppendLine();
             }
 
             if(string.IsNullOrEmpty(GoogleSpreadSheetUrl))
             {
-                errorMessages.Append("Google Spread Sheet URL is empty");
-                errorMessages.AppendLine();
+                errorMessages.Append(Constant.ErrorMessage.NullSpreadSheetURL);
                 errorMessages.AppendLine();
             }
 
@@ -174,6 +170,7 @@ namespace LocalizedText
             {
                 return "";
             }
+
             return Path.Combine(TextSetGenerateDirectory, string.Format("{0}.asset", TextSetAssetName));
         }
 
@@ -183,6 +180,7 @@ namespace LocalizedText
             {
                 return "";
             }
+
             return Path.Combine(KeyClassGenerateDirectory, string.Format("{0}.cs", KeyDefinitionClassName));
         }
 
@@ -220,4 +218,3 @@ namespace LocalizedText
         }
     }
 }
-

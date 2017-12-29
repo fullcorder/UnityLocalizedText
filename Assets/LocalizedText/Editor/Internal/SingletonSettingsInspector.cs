@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using LocalizedText.Editor.Internal;
-using LocalizedText.Importer;
+﻿using LocalizedText.Importer;
 using LocalText.Internal;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace LocalizedText.Internal
@@ -17,46 +14,46 @@ namespace LocalizedText.Internal
 
             serializedObject.Update();
 
-            GUILayout.Label("Asset Name", BoldLabelStyle);
+            //AssetName
+            GUILayout.Label(Constant.Inspactor.TextSetName, BoldLabelStyle);
             EditorGUILayout.LabelField(settings.TextSetAssetName);
 
             GUILayout.Label("Instance Type", BoldLabelStyle);
             EditorGUILayout.LabelField("Singleton (Use Resources folder)");
 
-            EditorGUILayout.Space();
-
-            EditorGUI.BeginChangeCheck();
-
-            GUILayout.Label("Language", BoldLabelStyle);
-            reorderableList.DoLayoutList();
-            serializedObject.ApplyModifiedProperties();
-
-            GUILayout.Label("Genrete TextSet Path", BoldLabelStyle);
+            GUILayout.Label("Generate TextSet Path", BoldLabelStyle);
             EditorGUILayout.LabelField(settings.TextSetAssetPath());
 
             GUILayout.Label("Genrete KeyFile Path", BoldLabelStyle);
             EditorGUILayout.LabelField(settings.KeyAssetPath());
 
-            EditorGUILayout.Space();
+            Separator();
 
-            GUILayout.Label("Data Source", BoldLabelStyle);
+            EditorGUI.BeginChangeCheck();
+
+            //Language
+            GUILayout.Label(Constant.Inspactor.Language, BoldLabelStyle);
+            reorderableList.DoLayoutList();
+            serializedObject.ApplyModifiedProperties();
+
+            //Data
+            GUILayout.Label(Constant.Inspactor.DataSouce, BoldLabelStyle);
             EditorGUILayout.LabelField(settings.SelectedDataSource.ToString());
 
-            EditorGUILayout.Space();
-
-            GUILayout.Label("Google spread sheet URL");
+            GUILayout.Label(Constant.Inspactor.SpreadSheetURL, BoldLabelStyle);
             settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
 
-            EditorGUILayout.Space();
+            Separator();
 
+            //Button
             EditorGUILayout.BeginHorizontal();
-            if(GUILayout.Button("Create"))
+            if(GUILayout.Button(Constant.Inspactor.ButtonGenerate))
             {
                 LocalizedTextLogger.Verbose("Create Button Click");
                 GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
             }
 
-            if(GUILayout.Button("Validate"))
+            if(GUILayout.Button(Constant.Inspactor.ButtonValidate))
             {
                 LocalizedTextLogger.Verbose("Validate Button Click");
 

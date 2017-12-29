@@ -8,7 +8,7 @@ namespace LocalizedText.Editor.Internal
 {
     public static class CreateSingletonSettingsMenu
     {
-        [MenuItem("Assets/Create/Localized Text/Create Singleton Settings", false, 800)]
+        [MenuItem(Constant.MenuName.MenuBarItemName, false, 800)]
         public static void MenuItem()
         {
             var settings = AssetDataBaseHelper.FindScriptableObject<SingletonSettings>("LocalizedTextSettings");
