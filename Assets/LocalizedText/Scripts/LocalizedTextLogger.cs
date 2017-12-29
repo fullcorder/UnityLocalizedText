@@ -21,7 +21,11 @@ namespace LocalText.Internal
 
         static LocalizedTextLogger()
         {
+#if UNITY_5
             logger = UnityEngine.Debug.logger;
+#else
+            logger = UnityEngine.Debug.unityLogger;
+#endif
         }
 
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]

@@ -41,8 +41,13 @@ namespace LocalizedText.Importer
                     }
                 }
 
-                //TODO support Unity2017 api
-                if(webRequest.isError)
+                #if UNITY_5
+                var isError = webRequest.isError;
+                #else
+                var isError = webRequest.isNetworkError;
+                #endif
+
+                if(isError)
                 {
                     LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Api Network Error.");
                     return;
