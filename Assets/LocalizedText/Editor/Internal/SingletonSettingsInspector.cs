@@ -44,25 +44,29 @@ namespace LocalizedText.Internal
 
             EditorGUILayout.Space();
 
-            if(settings.SelectedDataSource == Settings.DataSource.GoogleSpreadSheetAsWeb)
+            GUILayout.Label("Google spread sheet URL");
+            settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            if(GUILayout.Button("Create"))
             {
-                GUILayout.Label("Google spread sheet URL");
-                settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button("CreateAll or Update"))
-                {
-                    LocalizedTextLogger.Verbose("CreateAll Button Click");
-                    GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
-                }
-                EditorGUILayout.EndHorizontal();
+                LocalizedTextLogger.Verbose("Create Button Click");
+                GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
             }
+
+            if(GUILayout.Button("Validate"))
+            {
+                LocalizedTextLogger.Verbose("Validate Button Click");
+
+                Validate(settings);
+            }
+            EditorGUILayout.EndHorizontal();
 
             if(EditorGUI.EndChangeCheck())
             {
-                LocalizedTextLogger.Verbose("Save Setting Asset");
+                LocalizedTextLogger.Verbose("Setting updated. Save Setting");
                 EditorUtility.SetDirty(settings);
                 AssetDatabase.SaveAssets();
             }

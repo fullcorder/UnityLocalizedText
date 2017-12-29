@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,9 +15,7 @@ namespace LocalizedText
 
         public enum DataSource
         {
-            None,
             GoogleSpreadSheetAsWeb,
-            CsvLocal,
         }
 
         public enum DataFormat
@@ -109,22 +108,64 @@ namespace LocalizedText
             set { _selectedDataFormat = value; }
         }
 
-        public TextAsset LocaTextAsset
-        {
-            get { return _locaTextAsset; }
-            set { _locaTextAsset = value; }
-        }
-
         public string GoogleSpreadSheetUrl
         {
             get { return _googleSpreadSheetUrl; }
             set { _googleSpreadSheetUrl = value; }
         }
 
-        public bool UseAssetPostprocessImport
+        public bool Valid()
         {
-            get { return _useAssetPostprocessImport; }
-            set { _useAssetPostprocessImport = value; }
+            return ValidationErrorMessage().Length == 0;
+
+        }
+
+        public StringBuilder ValidationErrorMessage()
+        {
+            var errorMessages = new StringBuilder();
+            if(LanguageSettingList.Count == 0)
+            {
+                errorMessages.Append("Language / LanguageSettingList is empty");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            if(string.IsNullOrEmpty(TextSetAssetName))
+            {
+                errorMessages.Append("AssetName is empty");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            if(string.IsNullOrEmpty(TextSetGenerateDirectory))
+            {
+                errorMessages.Append("TextSet Generate Directory is not selected");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            if(string.IsNullOrEmpty(KeyDefinitionClassName))
+            {
+                errorMessages.Append("Key Definition Class Name is Empty");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            if(string.IsNullOrEmpty(KeyClassGenerateDirectory))
+            {
+                errorMessages.Append("Key Class Generate Directory is not selected");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            if(string.IsNullOrEmpty(GoogleSpreadSheetUrl))
+            {
+                errorMessages.Append("Google Spread Sheet URL is empty");
+                errorMessages.AppendLine();
+                errorMessages.AppendLine();
+            }
+
+            return errorMessages;
         }
 
         public string TextSetAssetPath()

@@ -109,57 +109,44 @@ namespace LocalizedText.Internal
 
             EditorGUILayout.Space();
 
-            if(settings.SelectedDataSource == Settings.DataSource.CsvLocal)
+            GUILayout.Label("Google spread sheet URL");
+            settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            if(GUILayout.Button("Create"))
             {
-                GUILayout.Label("CSV TextAsset");
-                settings.LocaTextAsset =
-                    EditorGUILayout.ObjectField(settings.LocaTextAsset, typeof(TextAsset), true) as TextAsset;
-
-                EditorGUILayout.Space();
-                settings.UseAssetPostprocessImport =
-                    EditorGUILayout.ToggleLeft("Use Auto CreateAll (Use Asset PostProcessor)",
-                        settings.UseAssetPostprocessImport);
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button("CreateAll or Update"))
-                {
-                    //TODO
-                }
-                if(GUILayout.Button("Validate"))
-                {
-                    //TODO
-                }
-                EditorGUILayout.EndHorizontal();
+                LocalizedTextLogger.Verbose("Create Button Click");
+                GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
             }
 
-            if(settings.SelectedDataSource == Settings.DataSource.GoogleSpreadSheetAsWeb)
+            if(GUILayout.Button("Validate"))
             {
-                GUILayout.Label("Google spread sheet URL");
-                settings.GoogleSpreadSheetUrl = EditorGUILayout.TextField(settings.GoogleSpreadSheetUrl);
+                LocalizedTextLogger.Verbose("Validate Button Click");
 
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                if(GUILayout.Button("CreateAll"))
-                {
-                    LocalizedTextLogger.Verbose("CreateAll Button Click");
-                    GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
-                }
-
-                if(GUILayout.Button("Validate"))
-                {
-                    //TODO
-                }
-                EditorGUILayout.EndHorizontal();
+                Validate(settings);
             }
+            EditorGUILayout.EndHorizontal();
 
             if(EditorGUI.EndChangeCheck())
             {
-                LocalizedTextLogger.Verbose("Save Setting Asset");
+                LocalizedTextLogger.Verbose("Setting updated. Save Setting");
                 EditorUtility.SetDirty(settings);
                 AssetDatabase.SaveAssets();
+            }
+        }
+
+        protected static void Validate(Settings settings)
+        {
+            if(settings.Valid())
+            {
+                EditorUtility.DisplayDialog("Validation", "Success", "OK");
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Validation Error", settings.ValidationErrorMessage()
+                    .ToString(), "OK");
             }
         }
 
