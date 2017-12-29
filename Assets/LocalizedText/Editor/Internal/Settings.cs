@@ -49,10 +49,6 @@ namespace LocalizedText
 
         [SerializeField] private DataFormat _selectedDataFormat;
 
-        [SerializeField] private TextAsset _locaTextAsset;
-
-        [SerializeField] private bool _useAssetPostprocessImport = true;
-
         [SerializeField] private string _googleSpreadSheetUrl;
 
         public IList<LanguageSetting> LanguageSettingList

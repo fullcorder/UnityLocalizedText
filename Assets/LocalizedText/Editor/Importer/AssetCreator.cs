@@ -24,7 +24,9 @@ namespace LocalizedText.Importer
             {
                 CreateTextSet(settings, csv);
             }
+#pragma warning disable 168
             catch(IndexOutOfRangeException e)
+#pragma warning restore 168
             {
                 LocalizedTextLogger.Error("Parse Fail.The number of columns may be incorrect");
             }

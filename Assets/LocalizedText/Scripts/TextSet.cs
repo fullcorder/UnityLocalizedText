@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace LocalText
 {
-    public partial class TextSet : ScriptableObject
+    public class TextSet : ScriptableObject
     {
         [SerializeField] private List<Language> languageList = new List<Language>();
 
@@ -56,7 +56,9 @@ namespace LocalText
             {
                 text = currentLanguageTextSet[key];
             }
+#pragma warning disable 168
             catch(NullReferenceException e)
+#pragma warning restore 168
             {
                 LocalizedTextLogger.ErrorFormat("No value found for key {0}. Confirm TextSet Inspector.", key);
             }
