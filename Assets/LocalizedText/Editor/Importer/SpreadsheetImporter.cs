@@ -26,13 +26,11 @@ namespace LocalizedText.Importer
 
         private static void FetchUrl(string url, Action<string> onComplete)
         {
-            using(var webRequest = UnityWebRequest.Get(url))
+            using(var www = new WWW(url))
             {
-                webRequest.Send();
-
                 var startTime = Time.realtimeSinceStartup;
                 var timeOutSec = TimeOutSec;
-                while(webRequest.responseCode == -1)
+                while(!www.isDone)
                 {
                     if(Time.realtimeSinceStartup - startTime > timeOutSec)
                     {
@@ -41,26 +39,13 @@ namespace LocalizedText.Importer
                     }
                 }
 
-                #if UNITY_5
-                var isError = webRequest.isError;
-                #else
-                var isError = webRequest.isNetworkError;
-                #endif
-
-                if(isError)
+                if(!string.IsNullOrEmpty(www.error))
                 {
                     LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Api Network Error.");
                     return;
                 }
 
-                if(webRequest.responseCode != 200)
-                {
-                    LocalizedTextLogger.ErrorFormat("GoogleSpreadSheetImporter : Response fail. responceCode {0}",
-                         webRequest.responseCode);
-                    return;
-                }
-
-                var csv = webRequest.downloadHandler.text;
+                var csv = www.text;
                 if(string.IsNullOrEmpty(csv))
                 {
                     LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Response body is Empty.");
