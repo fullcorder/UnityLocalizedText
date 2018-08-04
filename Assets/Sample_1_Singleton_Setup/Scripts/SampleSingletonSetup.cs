@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 namespace LocalizedText
 {
-    public class Sample : MonoBehaviour
+    public class SampleSingletonSetup : MonoBehaviour
     {
         [SerializeField]
         private Text _text;
