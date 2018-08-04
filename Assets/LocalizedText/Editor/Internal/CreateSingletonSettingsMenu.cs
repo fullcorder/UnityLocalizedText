@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using LocalizedText.Internal;
 using LocalText.Internal;
 using UnityEditor;
@@ -11,15 +13,8 @@ namespace LocalizedText.Editor.Internal
         [MenuItem(Constant.MenuName.MenuBarItemName, false, 800)]
         public static void MenuItem()
         {
-            var settings = AssetDataBaseHelper.FindScriptableObject<SingletonSettings>("LocalizedTextSettings");
-            if(settings)
-            {
-                LocalizedTextLogger.Error( "LocalizedTextSettings(SingletonSettings instance) not found." +
-                                           "Create From AssetMenu/LocalizeText/CreateSingletonSettings");
-                return;
-            }
-
             var assetRootPath = AssetDataBaseHelper.FirstAssetPathOrDefault("t:Object", "LocalizedText");
+
             if(string.IsNullOrEmpty(assetRootPath))
             {
                 LocalizedTextLogger.Error("LocalizedText directory not found. " +
@@ -32,14 +27,40 @@ namespace LocalizedText.Editor.Internal
             var singletonSettings = ScriptableObject.CreateInstance<SingletonSettings>();
             singletonSettings.name = "LocalizedTextSettings";
             singletonSettings.TextSetAssetName = "TextSet";
-            singletonSettings.TextSetGenerateDirectory = Path.Combine(assetRootPath, "Resources");
+
+            var resourcesDirectory = Path.Combine(assetRootPath, "Resources");
+            if(!Directory.Exists(resourcesDirectory)) AssetDatabase.CreateFolder(assetRootPath, "Resources");
+            singletonSettings.TextSetGenerateDirectory = resourcesDirectory;
+
             singletonSettings.KeyDefinitionClassName = "TextSetKey";
-            singletonSettings.KeyClassGenerateDirectory = Path.Combine(assetRootPath, "Scripts/Generated");
+
+            const string scripts = "Scripts";
+            const string generated = "Generated";
+
+            var generatedDirectory = new[] {assetRootPath, scripts, generated}.Aggregate(Path.Combine);
+
+            if(!Directory.Exists(generatedDirectory))
+            {
+                AssetDatabase.CreateFolder(Path.Combine(assetRootPath, scripts), generated);
+            }
+            singletonSettings.KeyClassGenerateDirectory = generatedDirectory;
+
             singletonSettings.SelectedDataSource = Settings.DataSource.GoogleSpreadSheetAsWeb;
             singletonSettings.SelectedDataFormat = Settings.DataFormat.Tsv;
 
-            AssetDatabase.CreateAsset(singletonSettings, Path.Combine(assetRootPath,
-                "Editor/Settings/LocalizedTextSettings.asset"));
+            const string editor = "Editor";
+            const string settings = "Settings";
+
+            var settingsDirectory = new[] {assetRootPath, editor, settings}.Aggregate(Path.Combine);
+
+            if(!Directory.Exists(settingsDirectory))
+            {
+                AssetDatabase.CreateFolder(Path.Combine(assetRootPath, editor), settings);
+            }
+
+            var settingsPath = Path.Combine(settingsDirectory, "LocalizedTextSettings.asset");
+            AssetDatabase.CreateAsset(singletonSettings, settingsPath);
+
             EditorUtility.SetDirty(singletonSettings);
             AssetDatabase.SaveAssets();
         }

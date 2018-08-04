@@ -13,7 +13,7 @@
         public const string DataSouce = "Data Source";
         public const string DataFormat = "Data Format";
         public const string SpreadSheetURL = "Google spread sheet URL";
-        public const string ButtonGenerate = "Create";
+        public const string ButtonGenerate = "Create / Update";
         public const string ButtonValidate = "Validate";
     }
 
