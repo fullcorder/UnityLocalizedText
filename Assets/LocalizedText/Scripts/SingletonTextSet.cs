@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LocalText;
+using LocalizedText;
 using UnityEngine;
 
 namespace LocalizedText
