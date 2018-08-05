@@ -2,7 +2,7 @@
 
 Unityのテキストのローカライズライブラリです.
 
-単一の言語の文字列の管理する用途にも, 利用することができます.# Overview
+文字列の管理する用途のみでも, 利用することができます.# Overview
 
 GoogleSpreadSheetから, テキストローカライズに特化したScriptableObject(TextSet)を生成します![Sample Data SS](https://i.gyazo.com/9f435e3fc5022570b560836b3675a5b2.png)## TextSet
 ```csharpTextSet localizedTitle = SingletonTextSet.Instance.Text(TextSetKey.title);Debug.Log(localizedTitle);
@@ -11,20 +11,7 @@ GoogleSpreadSheetから, テキストローカライズに特化したScriptable
 ```
 
 Google Spread Sheet Sample Data (Read Only)[https://docs.google.com/spreadsheets/d/1jB_F3j0umUc522B66OKHMZFBAG2mTnoOnGgkfccTJIA/edit#gid=0]()
-
-## モード
-- お手軽なResourcesを使うSingletonモードがあります
-- より詳細な設定ができ, ScriptableObjectの生成までのAdvanceモードがあります. AdvanceモードはSingletonではないため複数のTextSetを持つことができます
-
-## Unity Version
-- Unity5以降
-- Unity2017.4で動作確認しています
-
-## Version
-- N/A
-
-## License
-MIT# 動作モード
+# 動作モード
 動作モードは`SingletonSetting`, `AdvancedSetting`の2つがあります
 
 - **SingletonSetting:** ResoucesフォルダにScriptableObjectを生成して使います
@@ -84,6 +71,16 @@ MIT# 動作モード
 
 - **SingletonSetting**だと自動でシステム言語の変更が反映されます。
 - Text中の`<br>`タグを改行コードに変換します
+
+## Unity Version
+- Unity5以降
+- Unity2017.4で動作確認しています
+
+## Version
+- N/A
+
+## License
+MIT___
 
 # リファレンス
 
