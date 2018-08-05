@@ -11,9 +11,11 @@ namespace LocalizedText
         private void Start()
         {
             //1. Asset Menu / Create / LocalizedText / Create Singleton Settings
-            //2. Configure Settings
-            //3. Generate TextSet Assets by Settings Button
-            //4. Uncomment
+            //2. Generated LocalizedTextSettings at Assets/LoclizedText/Editor/Settings/LocalizedTextSettings
+            //3. Configure Language at LocalizedTextSettings inspector
+            //4. Configure Google Spread Sheet URL at LocalizedTextSettings inspector
+            // ex https://docs.google.com/spreadsheets/d/e/2PACX-1vRVG09sHjgpAKLrC4gK7tr4dKlm0CTi8jOy1E8tLqb9_gAvEiRt4_rprcjsRLGv5mGXW6c7tWbWz0m0/pub?gid=0&single=true&output=tsv
+            //5. Generate / Update  TextSet Assets by Settings Inspector
 
             /*
             var textSet = SingletonTextSet.Instance;
