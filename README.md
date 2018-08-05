@@ -130,3 +130,4 @@ public static TextSet Instance
 ```
 `Resources`にある`ScriptableObject`TextSetのシングルトンを取得します
 
+
