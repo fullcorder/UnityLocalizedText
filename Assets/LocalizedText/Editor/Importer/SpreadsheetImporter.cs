@@ -1,6 +1,5 @@
 ﻿using System;
 using LocalizedText.Internal;
-using LocalText.Internal;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -14,7 +13,7 @@ namespace LocalizedText.Importer
         {
             if(string.IsNullOrEmpty(settings.GoogleSpreadSheetUrl))
             {
-                LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Settings GoogleSpreadsheetUrl is Empty.");
+                LocalTextLogger.Error("GoogleSpreadSheetImporter : Settings GoogleSpreadsheetUrl is Empty.");
                 return;
             }
 
@@ -34,21 +33,21 @@ namespace LocalizedText.Importer
                 {
                     if(Time.realtimeSinceStartup - startTime > timeOutSec)
                     {
-                        LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Timeout. Confirm spreadsheet setting.");
+                        LocalTextLogger.Error("GoogleSpreadSheetImporter : Timeout. Confirm spreadsheet setting.");
                         break;
                     }
                 }
 
                 if(!string.IsNullOrEmpty(www.error))
                 {
-                    LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Api Network Error.");
+                    LocalTextLogger.Error("GoogleSpreadSheetImporter : Api Network Error.");
                     return;
                 }
 
                 var csv = www.text;
                 if(string.IsNullOrEmpty(csv))
                 {
-                    LocalizedTextLogger.Error("GoogleSpreadSheetImporter : Response body is Empty.");
+                    LocalTextLogger.Error("GoogleSpreadSheetImporter : Response body is Empty.");
                     return;
                 }
 

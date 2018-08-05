@@ -1,5 +1,5 @@
 ﻿using LocalizedText.Importer;
-using LocalText.Internal;
+using LocalizedText.Internal;
 using UnityEditor;
 using UnityEngine;
 
@@ -49,13 +49,13 @@ namespace LocalizedText.Internal
             EditorGUILayout.BeginHorizontal();
             if(GUILayout.Button(Constant.Inspactor.ButtonGenerate))
             {
-                LocalizedTextLogger.Verbose("Create Button Click");
+                LocalTextLogger.Verbose("Create Button Click");
                 GoogleSpreadSheetImporter.SyncGoogleSpreadSheetApi(settings);
             }
 
             if(GUILayout.Button(Constant.Inspactor.ButtonValidate))
             {
-                LocalizedTextLogger.Verbose("Validate Button Click");
+                LocalTextLogger.Verbose("Validate Button Click");
 
                 Validate(settings);
             }
@@ -63,7 +63,7 @@ namespace LocalizedText.Internal
 
             if(EditorGUI.EndChangeCheck())
             {
-                LocalizedTextLogger.Verbose("Setting updated. Save Setting");
+                LocalTextLogger.Verbose("Setting updated. Save Setting");
                 EditorUtility.SetDirty(settings);
                 AssetDatabase.SaveAssets();
             }

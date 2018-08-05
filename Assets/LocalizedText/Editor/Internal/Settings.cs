@@ -113,9 +113,7 @@ namespace LocalizedText
 
         public bool Valid()
         {
-            return ValidationErrorMessage()
-                       .Length ==
-                   0;
+            return ValidationErrorMessage().Length == 0;
         }
 
         public StringBuilder ValidationErrorMessage()

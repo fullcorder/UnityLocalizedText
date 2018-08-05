@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using LocalText.Internal;
+using LocalizedText.Internal;
 using UnityEngine;
 
-namespace LocalText
+namespace LocalizedText
 {
     public class TextSet : ScriptableObject
     {
@@ -60,7 +60,7 @@ namespace LocalText
             catch(NullReferenceException e)
 #pragma warning restore 168
             {
-                LocalizedTextLogger.ErrorFormat("No value found for key {0}. Confirm TextSet Inspector.", key);
+                LocalTextLogger.Error("No value found for key {0}. Confirm TextSet Inspector.", key);
             }
             return text;
         }
